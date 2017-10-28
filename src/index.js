@@ -34,6 +34,11 @@ export type Enable = {
   bottomRight?: boolean;
   bottomLeft?: boolean;
   topLeft?: boolean;
+  topCenter?: boolean;
+  rightCenter?: boolean;
+  bottomCenter?: boolean;
+  leftCenter?: boolean;
+  rotate?: boolean;
 }
 
 export type HandleStyles = {
@@ -157,6 +162,11 @@ export default class Resizable extends React.Component<ResizableProps, State> {
       bottomRight: true,
       bottomLeft: true,
       topLeft: true,
+      topCenter: true,
+      rightCenter: true,
+      bottomCenter: true,
+      leftCenter: true,
+      rotate: true,
     },
     style: {},
     grid: [1, 1],
@@ -344,6 +354,22 @@ export default class Resizable extends React.Component<ResizableProps, State> {
       if (lockAspectRatio) newWidth = newHeight / ratio;
     }
 
+    let degree = 0;
+    if (/rotate/i.test(direction)) {
+      const rect = this.size.clientRect,
+        center_x = (rect.left + rect.right) / 2,
+        center_y = (rect.top + rect.bottom) / 2,
+        radians = Math.atan2(clientX - center_x, clientY - center_y);
+      degree = Math.round((radians * (180 / Math.PI) * -1) + 100) + 80;
+
+      const rotateCSS = `rotate(${degree}deg)`;
+      // debugger
+      // console.log('rotateCSS', this.resizable, rotateCSS);
+
+      this.resizable.style.transform = rotateCSS;
+      this.resizable.style.webkitTranform = rotateCSS;
+    }
+
     if (this.props.bounds === 'parent') {
       const parent = this.parentNode;
       if (parent instanceof HTMLElement) {
@@ -402,6 +428,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     const delta = {
       width: newWidth - original.width,
       height: newHeight - original.height,
+      degree
     };
 
     if (width && typeof width === 'string' && width.endsWith('%')) {
@@ -417,6 +444,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     this.setState({
       width: width !== 'auto' || typeof this.props.width === 'undefined' ? newWidth : 'auto',
       height: height !== 'auto' || typeof this.props.height === 'undefined' ? newHeight : 'auto',
+      degree,
     });
 
     if (this.props.onResize) {
@@ -425,11 +453,14 @@ export default class Resizable extends React.Component<ResizableProps, State> {
   }
 
   onMouseUp(event: MouseEvent | TouchEvent) {
-    const { isResizing, direction, original } = this.state;
+    const { isResizing, direction, original, degree } = this.state;
     if (!isResizing) return;
     const delta = {
-      width: this.size.width - original.width,
-      height: this.size.height - original.height,
+      resizeWidth: this.size.width - original.width,
+      resizeHeight: this.size.height - original.height,
+      width: this.size.width,
+      height: this.size.height,
+      degree,
     };
     if (this.props.onResizeStop) {
       this.props.onResizeStop(event, direction, this.resizable, delta);
@@ -443,11 +474,13 @@ export default class Resizable extends React.Component<ResizableProps, State> {
   get size(): NumberSize {
     let width = 0;
     let height = 0;
+    let clientRect = {};
     if (typeof window !== 'undefined') {
       width = this.resizable.offsetWidth;
       height = this.resizable.offsetHeight;
+      clientRect = this.resizable.getBoundingClientRect();
     }
-    return { width, height };
+    return { width, height, clientRect };
   }
 
   get sizeStyle(): { width: string, height: string } {

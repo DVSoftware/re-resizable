@@ -34,6 +34,7 @@ const styles = {
     left: '-5px',
     cursor: 'col-resize',
   },
+
   topRight: {
     width: '20px',
     height: '20px',
@@ -66,9 +67,64 @@ const styles = {
     top: '-10px',
     cursor: 'nw-resize',
   },
+  topCenter: {
+    width: '20px',
+    height: '20px',
+    position: 'absolute',
+    left: '50%',
+    top: '-10px',
+    marginLeft: '-10px',
+    cursor: 'row-resize',
+  },
+  rightCenter: {
+    width: '20px',
+    height: '20px',
+    position: 'absolute',
+    top: '50%',
+    right: '-10px',
+    marginTop: '-10px',
+    cursor: 'col-resize',
+  },
+  bottomCenter: {
+    width: '20px',
+    height: '20px',
+    position: 'absolute',
+    left: '50%',
+    bottom: '-10px',
+    marginLeft: '-10px',
+    cursor: 'row-resize',
+  },
+  leftCenter: {
+    width: '20px',
+    height: '20px',
+    position: 'absolute',
+    top: '50%',
+    left: '-10px',
+    marginTop: '-10px',
+    cursor: 'col-resize',
+  },
+  rotate: {
+    width: '20px',
+    height: '20px',
+    position: 'absolute',
+    left: '50%',
+    top: '-30px',
+    marginLeft: '-10px',
+    cursor: 'url(https://assets.rrxh5.cc/www/images/mouserotate.ico)10 10,default',
+  },
+  rotateLine: {
+    position: 'absolute',
+    width: '2px',
+    height: '23px',
+    top: '7px',
+    left: '50%',
+    marginLeft: '-1px',
+    backgroundColor: '#4cae4c',
+    zIndex: -1,
+  }
 };
 
-export type Direction = 'top' | 'right' | 'bottom' | 'left' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'topLeft';
+export type Direction = 'top' | 'topCenter' | 'right' | 'rightCenter' | 'bottom' | 'bottomCenter' | 'left' | 'leftCenter' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'topLeft' | 'rotate';
 
 export type OnStartCallback = (
   e: SyntheticMouseEvent<HTMLDivElement> | SyntheticTouchEvent<HTMLDivElement>,
@@ -83,6 +139,11 @@ export type Props = {
 }
 
 export default (props: Props): React.Element<'div'> => {
+  const direction = props.direction;
+  let children = null;
+  if (direction === 'rotate') {
+    children = (<i style={{ ...styles.rotateLine, ...(props.replaceRotateLineStyles || {}), }} />);
+  }
   return (
     <div
       className={props.className}
@@ -96,7 +157,7 @@ export default (props: Props): React.Element<'div'> => {
       }}
       onTouchStart={(e: SyntheticTouchEvent<HTMLDivElement>) => {
         props.onResizeStart(e, props.direction);
-      }}
-    />
-  );
+      }}>
+      {children}
+    </div>);
 };
