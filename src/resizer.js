@@ -135,6 +135,7 @@ export type Props = {
   direction: Direction;
   className?: string;
   replaceStyles?: { [key: string]: string | number };
+  replaceRotateLineStyles?: { [key: string]: string | number };
   onResizeStart: OnStartCallback;
 }
 

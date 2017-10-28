@@ -50,6 +50,11 @@ export type HandleStyles = {
   bottomRight?: Style;
   bottomLeft?: Style;
   topLeft?: Style;
+  topCenter?: Style;
+  rightCenter?: Style;
+  bottomCenter?: Style;
+  leftCenter?: Style;
+  rotate?: Style;
 }
 
 export type HandleClassName = {
@@ -61,11 +66,17 @@ export type HandleClassName = {
   bottomRight?: string;
   bottomLeft?: string;
   topLeft?: string;
+  topCenter?: string;
+  rightCenter?: string;
+  bottomCenter?: string;
+  leftCenter?: string;
+  rotate?: string;
 }
 
 export type Size = {
   width: string | number;
   height: string | number;
+  clientRect: object;
 }
 
 type NumberSize = {
@@ -190,6 +201,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
         width: 0,
         height: 0,
       },
+      degree: 0
     };
 
     this.updateExtendsProps(props);
@@ -354,7 +366,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
       if (lockAspectRatio) newWidth = newHeight / ratio;
     }
 
-    let degree = 0;
+    let degree = this.state.degree;
     if (/rotate/i.test(direction)) {
       const rect = this.size.clientRect,
         center_x = (rect.left + rect.right) / 2,
