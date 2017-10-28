@@ -76,7 +76,6 @@ export type HandleClassName = {
 export type Size = {
   width: string | number;
   height: string | number;
-  clientRect: object;
 }
 
 type NumberSize = {
@@ -131,6 +130,7 @@ type State = {
   };
   width: number | string;
   height: number | string;
+  degree: number;
 }
 
 const clamp = (n: number, min: number, max: number): number => Math.max(Math.min(n, max), min);
@@ -368,7 +368,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
 
     let degree = this.state.degree;
     if (/rotate/i.test(direction)) {
-      const rect = this.size.clientRect,
+      const rect = this.resizable.getBoundingClientRect(),
         center_x = (rect.left + rect.right) / 2,
         center_y = (rect.top + rect.bottom) / 2,
         radians = Math.atan2(clientX - center_x, clientY - center_y);
@@ -486,13 +486,11 @@ export default class Resizable extends React.Component<ResizableProps, State> {
   get size(): NumberSize {
     let width = 0;
     let height = 0;
-    let clientRect = {};
     if (typeof window !== 'undefined') {
       width = this.resizable.offsetWidth;
       height = this.resizable.offsetHeight;
-      clientRect = this.resizable.getBoundingClientRect();
     }
-    return { width, height, clientRect };
+    return { width, height };
   }
 
   get sizeStyle(): { width: string, height: string } {
