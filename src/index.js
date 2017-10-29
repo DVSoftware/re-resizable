@@ -483,6 +483,9 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     this.setState({ isResizing: false });
   }
 
+  get degree(): number {
+    return this.state.degree;
+  }
   get size(): NumberSize {
     let width = 0;
     let height = 0;

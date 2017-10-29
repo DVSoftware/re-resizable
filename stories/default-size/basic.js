@@ -72,6 +72,9 @@ const handleRotateStyles = {
 }
 export default () => (
   <Resizable
+    ref={(c: (React$ElementRef<typeof Resizable> | null)) => {
+      this.resizable = c;
+    }}
     style={style}
     defaultSize={{
       width: 200,
@@ -101,7 +104,7 @@ export default () => (
       rotate: handleRotateStyles,
     }}
     onResizeStop={(event, direction, resizable, delta) => {
-      console.log('delta', delta)
+      console.log('delta', delta, this.resizable.degree)
     }}
   >
     001
