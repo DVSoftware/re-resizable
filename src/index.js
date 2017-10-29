@@ -380,6 +380,20 @@ export default class Resizable extends React.Component<ResizableProps, State> {
         center_y = (rect.top + rect.bottom) / 2,
         radians = Math.atan2(clientX - center_x, clientY - center_y);
       degree = Math.round((radians * (180 / Math.PI) * -1) + 100) + 80;
+      const { position } = this.props;
+      let style = null;
+      if (position) {
+        const { x, y } = position;
+        style = createCSSTransform({ x, y, degree: this.state.degree });
+      }
+
+      if (style) {
+        Object.keys(style).map((key) => {
+          if (style && key && style[key]) {
+            this.resizable.style[key] = style[key];
+          }
+        });
+      }
     }
 
     if (this.props.bounds === 'parent') {
@@ -552,12 +566,6 @@ export default class Resizable extends React.Component<ResizableProps, State> {
 
   render(): React.Node {
     const userSelect = this.state.isResizing ? userSelectNone : userSelectAuto;
-    const { position } = this.props;
-    let style = null;
-    if (position) {
-      const { x, y } = position;
-      style = createCSSTransform({ x, y, degree: this.state.degree });
-    }
 
     return (
       <div
@@ -572,7 +580,6 @@ export default class Resizable extends React.Component<ResizableProps, State> {
           minWidth: this.props.minWidth,
           minHeight: this.props.minHeight,
           boxSizing: 'border-box',
-          ...style
         }}
         className={this.props.className}
         {...this.extendsProps}

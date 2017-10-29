@@ -5,8 +5,7 @@ export function createCSSTransform({ x, y, degree }: { x: number, y: number, deg
   let cssStyle = '';
   if (degree) {
     cssStyle = 'translate(' + x + 'px,' + y + 'px) rotate(' + degree + 'deg)';
-
-  } else {
+  } else if (x || y) {
     cssStyle = 'translate(' + x + 'px,' + y + 'px)';
   }
   return { [browserPrefixToKey('transform', browserPrefix)]: cssStyle };
