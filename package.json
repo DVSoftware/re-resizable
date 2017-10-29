@@ -32,14 +32,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bokuweb/react-resizable-box.git"
+    "url": "https://github.com/nowgoant/re-resizable.git"
   },
   "author": "bokuweb",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bokuweb/react-resizable-box/issues"
   },
-  "homepage": "https://github.com/bokuweb/react-resizable-box",
+  "homepage": "https://github.com/nowgoant/re-resizable",
   "devDependencies": {
     "@storybook/addon-info": "^3.2.9",
     "@storybook/react": "^3.2.8",
