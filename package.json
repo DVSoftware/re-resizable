@@ -1,6 +1,6 @@
 {
   "name": "re-resizable-rotate",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Resizable component for React.",
   "title": "re-resizable",
   "main": "./lib/index.es5.js",

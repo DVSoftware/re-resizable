@@ -80,6 +80,7 @@ export default () => (
       width: 200,
       height: 200,
     }}
+    position={{ x: 10, y: 40.323 }}
     className={'rnd-resizable1'}
     handleClasses={{
       topLeft: 'resize-handle-base-class',

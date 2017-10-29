@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Resizer from './resizer';
+import { createCSSTransform } from './utils/domFns';
 
 import type { Direction, OnStartCallback } from './resizer';
 
@@ -77,6 +78,10 @@ export type Size = {
   width: string | number;
   height: string | number;
 }
+export type Position = {
+  x: string | number;
+  y: string | number;
+}
 
 type NumberSize = {
   width: number;
@@ -102,6 +107,7 @@ export type ResizableProps = {
   grid?: [number, number];
   bounds?: 'parent' | 'window' | HTMLElement;
   size?: Size;
+  position?: Position;
   minWidth?: string | number;
   minHeight?: string | number;
   maxWidth?: string | number;
@@ -182,6 +188,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     style: {},
     grid: [1, 1],
     lockAspectRatio: false,
+    position: { x: 0, y: 0 }
   }
 
   constructor(props: ResizableProps) {
@@ -373,13 +380,6 @@ export default class Resizable extends React.Component<ResizableProps, State> {
         center_y = (rect.top + rect.bottom) / 2,
         radians = Math.atan2(clientX - center_x, clientY - center_y);
       degree = Math.round((radians * (180 / Math.PI) * -1) + 100) + 80;
-
-      const rotateCSS = `rotate(${degree}deg)`;
-      // debugger
-      // console.log('rotateCSS', this.resizable, rotateCSS);
-
-      this.resizable.style.transform = rotateCSS;
-      this.resizable.style.webkitTranform = rotateCSS;
     }
 
     if (this.props.bounds === 'parent') {
@@ -552,6 +552,13 @@ export default class Resizable extends React.Component<ResizableProps, State> {
 
   render(): React.Node {
     const userSelect = this.state.isResizing ? userSelectNone : userSelectAuto;
+    const { position } = this.props;
+    let style = null;
+    if (position) {
+      const { x, y } = position;
+      style = createCSSTransform({ x, y, degree: this.state.degree });
+    }
+
     return (
       <div
         ref={(c: React.ElementRef<'div'> | null) => { this.resizable = c; }}
@@ -565,6 +572,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
           minWidth: this.props.minWidth,
           minHeight: this.props.minHeight,
           boxSizing: 'border-box',
+          ...style
         }}
         className={this.props.className}
         {...this.extendsProps}
