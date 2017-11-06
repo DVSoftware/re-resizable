@@ -454,6 +454,8 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     const delta = {
       width: newWidth - original.width,
       height: newHeight - original.height,
+      newWidth: newWidth,
+      newHeight: newHeight,
       degree
     };
 
@@ -482,10 +484,10 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     const { isResizing, direction, original, degree } = this.state;
     if (!isResizing) return;
     const delta = {
-      resizeWidth: this.size.width - original.width,
-      resizeHeight: this.size.height - original.height,
-      width: this.size.width,
-      height: this.size.height,
+      width: this.size.width - original.width,
+      height: this.size.height - original.height,
+      newWidth: this.size.width,
+      newHeight: this.size.height,
       degree,
     };
     if (this.props.onResizeStop) {

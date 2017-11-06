@@ -104,6 +104,9 @@ export default () => (
       leftCenter: handleLeftCenterStyles,
       rotate: handleRotateStyles,
     }}
+    onResize={(event, direction, resizable, delta) => {
+      console.log('delta', delta, this.resizable.degree)
+    }}
     onResizeStop={(event, direction, resizable, delta) => {
       console.log('delta', delta, this.resizable.degree)
     }}
