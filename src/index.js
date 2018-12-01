@@ -377,6 +377,7 @@ export default class Resizable extends React.Component<ResizableProps, State> {
     if (/rotate/i.test(direction)) {
       const rect = this.resizable.getBoundingClientRect(),
         center_x = (rect.left + rect.right) / 2,
+        console.log(rect, center_x);
         center_y = (rect.top + rect.bottom) / 2,
         radians = Math.atan2(clientX - center_x, clientY - center_y);
       degree = Math.round((radians * (180 / Math.PI) * -1) + 100) + 80;
